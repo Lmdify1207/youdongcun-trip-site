@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>游東村麵麵家族旅行團</title>
+  <style>
+    :root {
+      --ocean: #0b6fa4;
+      --ocean-dark: #074d73;
+      --ocean-soft: #e7f4fb;
+      --cream: #f7f0df;
+      --card: #ffffff;
+      --ink: #1f2933;
+      --muted: #5b6875;
+      --line: #d9e1e7;
+      --notice: #fff2df;
+      --notice-border: #e46f2f;
+      --shadow: 0 10px 24px rgba(20, 61, 89, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding-bottom: 28px;
+    }
+
+    .hero {
+      background:
+        linear-gradient(135deg, rgba(7, 77, 115, 0.95), rgba(11, 111, 164, 0.86)),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80") center/cover;
+      color: #fff;
+      padding: 22px 16px 24px;
+    }
+
+    .wrap {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(30px, 9vw, 54px);
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    .hero-subtitle {
+      margin: 10px 0 0;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .notice {
+      margin-top: 18px;
+      border: 2px solid var(--notice-border);
+      border-radius: 12px;
+      background: var(--notice);
+      color: #612900;
+      padding: 14px 15px;
+      font-size: 19px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(120, 53, 15, 0.16);
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .overview-card {
+      min-height: 86px;
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.16);
+      padding: 12px;
+      backdrop-filter: blur(6px);
+    }
+
+    .overview-card span {
+      display: block;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .overview-card strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 20px;
+      line-height: 1.28;
+    }
+
+    .top-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .link-button,
+    .nav-button,
+    .filter-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      background: var(--ocean);
+      font-weight: 900;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .link-button.light {
+      background: #fff;
+      color: var(--ocean-dark);
+    }
+
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 8px 18px rgba(20, 61, 89, 0.09);
+    }
+
+    .sticky-nav .wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 10px 14px;
+    }
+
+    .day-buttons,
+    .filter-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .day-button,
+    .filter-button {
+      min-height: 48px;
+      border: 2px solid var(--ocean);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ocean-dark);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .day-button.active,
+    .filter-button.active {
+      background: var(--ocean);
+      color: #fff;
+    }
+
+    main {
+      padding: 16px 14px 34px;
+    }
+
+    section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      color: var(--ocean-dark);
+      font-size: 26px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .focus-box,
+    .family-box,
+    .stay-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .focus-list,
+    .family-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .focus-list li,
+    .family-list li {
+      border-radius: 10px;
+      background: var(--ocean-soft);
+      padding: 11px 12px;
+      font-weight: 800;
+    }
+
+    .stay-box p {
+      margin: 6px 0;
+      font-weight: 800;
+    }
+
+    .day-section {
+      display: none;
+    }
+
+    .day-section.active {
+      display: block;
+    }
+
+    .day-heading {
+      border-radius: 14px;
+      background: var(--ocean-dark);
+      color: #fff;
+      padding: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .day-heading h2 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .day-heading p {
+      margin: 6px 0 0;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 18px;
+      width: 4px;
+      border-radius: 99px;
+      background: #bdd8e8;
+    }
+
+    .trip-card {
+      position: relative;
+      margin-left: 34px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card);
+      padding: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .trip-card::before {
+      content: "";
+      position: absolute;
+      top: 19px;
+      left: -25px;
+      width: 14px;
+      height: 14px;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      background: var(--ocean);
+      box-shadow: 0 0 0 2px #bdd8e8;
+    }
+
+    .card-top {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .time {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 36px;
+      border-radius: 999px;
+      background: var(--ocean-soft);
+      color: var(--ocean-dark);
+      padding: 4px 12px;
+      font-size: 20px;
+      font-weight: 1000;
+    }
+
+    .place {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.28;
+      letter-spacing: 0;
+    }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .meta-row {
+      display: grid;
+      grid-template-columns: 5.8em 1fr;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .meta-label {
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .meta-value {
+      font-weight: 800;
+    }
+
+    .note {
+      border-radius: 10px;
+      background: #f6f8fa;
+      padding: 11px 12px;
+      margin-top: 10px;
+    }
+
+    .note strong {
+      color: var(--ocean-dark);
+    }
+
+    .caution {
+      border-left: 5px solid var(--notice-border);
+      background: #fff7eb;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .tag.must { background: #064a79; }
+    .tag.food { background: #d66b19; }
+    .tag.gift { background: #2e7d32; }
+    .tag.flex { background: #607d8b; }
+    .tag.skip { background: #8b949e; }
+    .tag.stay { background: #7353a7; }
+    .tag.return { background: #38424c; }
+    .tag.move { background: #0b6fa4; }
+    .tag.end { background: #263238; }
+
+    .nav-button {
+      width: 100%;
+      min-height: 50px;
+      margin-top: 14px;
+      background: var(--ocean);
+      font-size: 18px;
+    }
+
+    .empty {
+      display: none;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 18px;
+      color: var(--muted);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .empty.show {
+      display: block;
+    }
+
+    @media (min-width: 720px) {
+      body {
+        font-size: 19px;
+      }
+
+      .hero {
+        padding: 34px 22px 32px;
+      }
+
+      .overview {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .top-actions {
+        grid-template-columns: 1fr 1fr;
+        max-width: 620px;
+      }
+
+      .sticky-nav .wrap {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        padding-inline: 22px;
+      }
+
+      .day-buttons {
+        width: 360px;
+      }
+
+      .filter-buttons {
+        width: 280px;
+      }
+
+      main {
+        padding: 24px 22px 44px;
+      }
+
+      .trip-card {
+        padding: 18px;
+      }
+
+      .card-top {
+        grid-template-columns: auto 1fr;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="wrap">
+        <h1 class="hero-title">游東村麵麵家族旅行團</h1>
+        <p class="hero-subtitle">6/19～6/20｜20人家庭旅遊｜嘉義溪口出發</p>
+
+        <div class="notice">
+          重要公告：13:00 南洋風高腳屋已訂位，只保留 10 分鐘。請務必準時抵達，遲到請自行負責。
+        </div>
+
+        <div class="overview" aria-label="旅遊總覽">
+          <div class="overview-card">
+            <span>人數</span>
+            <strong>20人家庭旅遊</strong>
+          </div>
+          <div class="overview-card">
+            <span>日期</span>
+            <strong>6/19～6/20</strong>
+          </div>
+          <div class="overview-card">
+            <span>出發地</span>
+            <strong>嘉義溪口出發</strong>
+          </div>
+          <div class="overview-card">
+            <span>住宿</span>
+            <strong>Chen Home</strong>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <a class="link-button light" href="https://twstay.tw/chenhome/" target="_blank" rel="noreferrer">查看民宿官網</a>
+          <a class="link-button" href="https://maps.app.goo.gl/Eg9PENUZmJJySpeK8" target="_blank" rel="noreferrer">民宿 Google Maps</a>
+        </div>
+      </div>
+    </header>
+
+    <nav class="sticky-nav" aria-label="快速切換">
+      <div class="wrap">
+        <div class="day-buttons">
+          <button class="day-button active" type="button" data-day="day1">Day 1</button>
+          <button class="day-button" type="button" data-day="day2">Day 2</button>
+        </div>
+        <div class="filter-buttons">
+          <button class="filter-button" type="button" id="mustOnly">只看必去</button>
+          <button class="filter-button" type="button" id="showAll">顯示全部</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="wrap">
+      <section aria-labelledby="focus-title">
+        <h2 class="section-title" id="focus-title">今日重點提醒</h2>
+        <div class="focus-box">
+          <ul class="focus-list">
+            <li>13:00 南洋風高腳屋已訂位，只保留 10 分鐘</li>
+            <li>請大家準時集合，遲到請自行負責</li>
+            <li>有長輩同行，行程以安全、順路、不要太趕為主</li>
+            <li>每站集合時間請看清楚</li>
+            <li>回程如果時間還早，可考慮台南吃東西</li>
+          </ul>
+        </div>
+      </section>
+
+      <section aria-labelledby="stay-title">
+        <h2 class="section-title" id="stay-title">住宿資訊</h2>
+        <div class="stay-box">
+          <p><strong>墾丁辰居民宿 Chen Home</strong></p>
+          <p>地址：屏東縣恆春鎮環城北路142巷8-8號</p>
+          <a class="nav-button" href="https://maps.app.goo.gl/Eg9PENUZmJJySpeK8" target="_blank" rel="noreferrer">開啟民宿導航</a>
+        </div>
+      </section>
+
+      <section class="day-section active" id="day1" aria-labelledby="day1-title">
+        <div class="day-heading">
+          <h2 id="day1-title">Day 1｜嘉義溪口 → 南洋風高腳屋 → 墾丁景點 → 民宿</h2>
+          <p>重點是準時抵達 13:00 午餐，下午行程可依長輩體力彈性調整。</p>
+        </div>
+        <div class="timeline" id="day1Timeline"></div>
+        <div class="empty" id="day1Empty">Day 1 沒有符合條件的行程。</div>
+      </section>
+
+      <section class="day-section" id="day2" aria-labelledby="day2-title">
+        <div class="day-heading">
+          <h2 id="day2-title">Day 2｜民宿 → 卡丁車 → 車城／枋山 → 東港 → 麟洛 → 嘉義溪口</h2>
+          <p>回程看時間與長輩狀況，太晚就直接回嘉義溪口。</p>
+        </div>
+        <div class="timeline" id="day2Timeline"></div>
+        <div class="empty" id="day2Empty">Day 2 沒有符合條件的行程。</div>
+      </section>
+
+      <section aria-labelledby="family-title">
+        <h2 class="section-title" id="family-title">家人提醒</h2>
+        <div class="family-box">
+          <ul class="family-list">
+            <li>準時集合</li>
+            <li>13:00 餐廳只保留10分鐘</li>
+            <li>長輩走路請放慢</li>
+            <li>每台車請確認乘客</li>
+            <li>手機請充飽電</li>
+            <li>帶現金</li>
+            <li>防曬、防蚊、帽子</li>
+            <li>雨具</li>
+            <li>個人藥品</li>
+            <li>伴手禮不要買到車子爆炸</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const trips = {
+      day1: [
+        {
+          time: "10:00",
+          place: "嘉義溪口集合",
+          address: "嘉義縣溪口鄉",
+          duration: "約20分鐘",
+          tags: ["必去"],
+          highlight: "確認人數、車輛分配、行李、長輩是否都上車",
+          caution: "請準時集合，不要讓整團等一個人"
+        },
+        {
+          time: "10:20",
+          place: "準時出發前往屏東內埔",
+          address: "南洋風高腳屋",
+          duration: "車程約2～2.5小時，依實際路況調整",
+          tags: ["必去"],
+          highlight: "前往 13:00 已訂位餐廳",
+          caution: "餐廳只保留10分鐘，遲到請自行負責",
+          mapUrl: "https://maps.app.goo.gl/2roTSvHWSQUENikE8?g_st=al"
+        },
+        {
+          time: "13:00",
+          place: "南洋風高腳屋／泰國高腳屋",
+          address: "屏東縣內埔鄉富豐路306號",
+          duration: "約90分鐘",
+          tags: ["吃飯", "必去"],
+          highlight: "已訂位，13:00 用餐",
+          caution: "只保留10分鐘，建議12:50前抵達；遲到者請自行負責或自行前往下一站",
+          mapUrl: "https://maps.app.goo.gl/2roTSvHWSQUENikE8?g_st=al"
+        },
+        {
+          time: "14:30",
+          place: "出發前往墾丁",
+          address: "墾丁國家公園遊客中心",
+          duration: "車程約70～90分鐘",
+          tags: ["移動"],
+          highlight: "用餐後一路往墾丁方向",
+          caution: "連假可能塞車，後續行程可彈性調整",
+          mapUrl: "https://maps.app.goo.gl/nmaC9BG359aPqa7v9"
+        },
+        {
+          time: "15:45",
+          place: "墾丁國家公園遊客中心",
+          address: "屏東縣恆春鎮墾丁路596號",
+          duration: "約30～40分鐘",
+          tags: ["彈性"],
+          highlight: "適合上廁所、休息、吹冷氣、讓長輩緩一下",
+          caution: "開放時間通常到17:00，若抵達太晚就縮短停留",
+          mapUrl: "https://maps.app.goo.gl/nmaC9BG359aPqa7v9"
+        },
+        {
+          time: "16:30",
+          place: "台電南部展示館",
+          address: "台電南部展示館",
+          duration: "約20～30分鐘",
+          tags: ["可跳過"],
+          highlight: "室內景點，適合短暫參觀",
+          caution: "若時間延誤或接近閉館，請直接跳過，不要硬塞",
+          mapUrl: "https://maps.app.goo.gl/4YtSP7eTvMLZZjhv8"
+        },
+        {
+          time: "17:10",
+          place: "紅柴坑漁港",
+          address: "紅柴坑漁港",
+          duration: "約25～30分鐘",
+          tags: ["必去"],
+          highlight: "看海龜、看海、拍照",
+          caution: "請勿餵食海龜，不要靠太近，注意港邊安全",
+          mapUrl: "https://maps.app.goo.gl/KMjpyjRYWTLJPRh37"
+        },
+        {
+          time: "17:45",
+          place: "萬里桐",
+          address: "萬里桐",
+          duration: "約30分鐘",
+          tags: ["彈性"],
+          highlight: "海邊散步、拍照、看夕陽",
+          caution: "長輩走路請小心，若天色太晚就縮短停留"
+        },
+        {
+          time: "18:30",
+          place: "前往民宿 Chen Home",
+          address: "屏東縣恆春鎮環城北路142巷8-8號",
+          duration: "車程約20～30分鐘",
+          tags: ["必去"],
+          highlight: "前往民宿入住",
+          caution: "抵達後先分房、停車、整理行李",
+          mapUrl: "https://maps.app.goo.gl/Eg9PENUZmJJySpeK8"
+        },
+        {
+          time: "19:00",
+          place: "抵達民宿 Chen Home",
+          address: "屏東縣恆春鎮環城北路142巷8-8號",
+          duration: "晚上休息",
+          tags: ["住宿"],
+          highlight: "入住、分房、休息",
+          caution: "晚餐自理，可外帶、民宿吃，或到恆春市區覓食",
+          mapUrl: "https://maps.app.goo.gl/Eg9PENUZmJJySpeK8"
+        }
+      ],
+      day2: [
+        {
+          time: "08:30",
+          place: "民宿早餐／整理行李",
+          address: "屏東縣恆春鎮環城北路142巷8-8號",
+          duration: "約60分鐘",
+          tags: ["必去"],
+          highlight: "整理行李、確認個人物品",
+          caution: "離開前確認房間、充電器、衣物、長輩物品",
+          mapUrl: "https://maps.app.goo.gl/Eg9PENUZmJJySpeK8"
+        },
+        {
+          time: "09:30",
+          place: "退房出發",
+          address: "恆春卡丁車",
+          duration: "車程約10～20分鐘",
+          tags: ["移動"],
+          highlight: "前往恆春市區卡丁車",
+          caution: "長輩可在旁邊休息，不一定要參加"
+        },
+        {
+          time: "10:00",
+          place: "恆春市區卡丁車",
+          address: "墾丁恐龍賽車場 或 恆春卡丁車",
+          duration: "約45～60分鐘",
+          tags: ["彈性"],
+          highlight: "年輕人活動，其他人可休息拍照",
+          caution: "請依現場規定戴安全帽、聽教練說明；若長輩不方便，這站可縮短"
+        },
+        {
+          time: "11:10",
+          place: "看海美術館",
+          address: "屏東縣車城鄉海口路1-12號",
+          duration: "約30～40分鐘",
+          tags: ["必去"],
+          highlight: "看海、拍照、長輩友善的輕鬆景點",
+          caution: "若天氣太熱，停留時間不要太長"
+        },
+        {
+          time: "11:50",
+          place: "車城洋蔥伴手禮",
+          address: "車城地區農會生鮮超市 或 車城洋蔥",
+          duration: "約20～30分鐘",
+          tags: ["伴手禮"],
+          highlight: "購買車城洋蔥、洋蔥肉包或在地農產品",
+          caution: "以順路購買為主，不要停留太久"
+        },
+        {
+          time: "12:30",
+          place: "加祿車站",
+          address: "屏東縣枋山鄉加祿村會社路53號",
+          duration: "約20～30分鐘",
+          tags: ["彈性"],
+          highlight: "特色小站拍照、休息",
+          caution: "短暫停留即可，避免影響東港用餐時間"
+        },
+        {
+          time: "14:00",
+          place: "東港黑鮪魚／華僑市場",
+          address: "屏東縣東港鎮朝隆路39號",
+          duration: "約75～90分鐘",
+          tags: ["吃飯", "必去"],
+          highlight: "吃黑鮪魚、海鮮、買東港伴手禮",
+          caution: "連假人多，若華僑市場太擠，可改東港市區海產餐廳"
+        },
+        {
+          time: "15:30",
+          place: "麟洛果菜批發市場買芒果",
+          address: "屏東縣麟洛鄉中山路673號",
+          duration: "約30分鐘",
+          tags: ["伴手禮"],
+          highlight: "買芒果、水果、補給",
+          caution: "市場時間與攤位狀況可能不同，請以現場為準"
+        },
+        {
+          time: "16:20",
+          place: "準備回嘉義溪口",
+          address: "嘉義縣溪口鄉",
+          duration: "車程約2.5～3.5小時",
+          tags: ["回程"],
+          highlight: "一路北上回嘉義",
+          caution: "連假可能塞車，請保留彈性時間"
+        },
+        {
+          time: "彈性",
+          place: "台南吃東西備案",
+          address: "台南美食",
+          duration: "約60分鐘",
+          tags: ["可跳過"],
+          highlight: "如果回程還有時間、大家不累，可以下台南吃東西",
+          caution: "若時間太晚或長輩累了，請直接回嘉義溪口"
+        },
+        {
+          time: "20:00～21:00",
+          place: "預計返回嘉義溪口",
+          address: "嘉義縣溪口鄉",
+          duration: "行程結束",
+          tags: ["終點"],
+          highlight: "平安回家",
+          caution: "依實際路況調整抵達時間"
+        }
+      ]
+    };
+
+    const tagClasses = {
+      "必去": "must",
+      "吃飯": "food",
+      "伴手禮": "gift",
+      "彈性": "flex",
+      "可跳過": "skip",
+      "住宿": "stay",
+      "回程": "return",
+      "移動": "move",
+      "終點": "end"
+    };
+
+    let activeDay = "day1";
+    let mustOnly = false;
+
+    function getMapUrl(item) {
+      if (item.mapUrl) {
+        return item.mapUrl;
+      }
+      const query = item.address || item.place;
+      return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
+    }
+
+    function createCard(item) {
+      const tags = item.tags.map((tag) => {
+        const className = tagClasses[tag] || "flex";
+        return `<span class="tag ${className}">${tag}</span>`;
+      }).join("");
+
+      return `
+        <article class="trip-card" data-tags="${item.tags.join(",")}">
+          <div class="card-top">
+            <div class="time">${item.time}</div>
+            <h3 class="place">${item.place}</h3>
+          </div>
+          <div class="meta">
+            <div class="meta-row">
+              <div class="meta-label">地址</div>
+              <div class="meta-value">${item.address}</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">停留時間</div>
+              <div class="meta-value">${item.duration}</div>
+            </div>
+          </div>
+          <div class="note"><strong>重點：</strong>${item.highlight}</div>
+          <div class="note caution"><strong>注意：</strong>${item.caution}</div>
+          <div class="tags">${tags}</div>
+          <a class="nav-button" href="${getMapUrl(item)}" target="_blank" rel="noreferrer">開啟 Google Maps 導航</a>
+        </article>
+      `;
+    }
+
+    function render() {
+      Object.keys(trips).forEach((day) => {
+        const items = mustOnly ? trips[day].filter((item) => item.tags.includes("必去")) : trips[day];
+        document.getElementById(day + "Timeline").innerHTML = items.map(createCard).join("");
+        document.getElementById(day + "Empty").classList.toggle("show", items.length === 0);
+      });
+    }
+
+    function switchDay(day) {
+      activeDay = day;
+      document.querySelectorAll(".day-button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.day === day);
+      });
+      document.querySelectorAll(".day-section").forEach((section) => {
+        section.classList.toggle("active", section.id === day);
+      });
+      document.getElementById(day).scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    document.querySelectorAll(".day-button").forEach((button) => {
+      button.addEventListener("click", () => switchDay(button.dataset.day));
+    });
+
+    document.getElementById("mustOnly").addEventListener("click", () => {
+      mustOnly = true;
+      document.getElementById("mustOnly").classList.add("active");
+      document.getElementById("showAll").classList.remove("active");
+      render();
+    });
+
+    document.getElementById("showAll").addEventListener("click", () => {
+      mustOnly = false;
+      document.getElementById("showAll").classList.add("active");
+      document.getElementById("mustOnly").classList.remove("active");
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
